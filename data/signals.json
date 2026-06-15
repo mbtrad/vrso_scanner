@@ -1,7 +1,7 @@
 {
-  "scan_time": null,
-  "scan_date": null,
-  "total_scanned": 0,
+  "scan_time": "2026-06-15 12:28 UTC",
+  "scan_date": "2026-06-15",
+  "total_scanned": 477,
   "total_signals": 0,
   "new_signals": 0,
   "signals": []
