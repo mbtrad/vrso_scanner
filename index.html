@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VRSO Scanner</title>
+<style>
+  /* ── TOKENS ─────────────────────────────────────────────── */
+  :root {
+    --bg:        #0d0f1a;
+    --surface:   #131629;
+    --surface2:  #1a1f38;
+    --border:    #252a45;
+    --gold:      #f6c90e;
+    --gold-dim:  #b8960a;
+    --green:     #3ddc97;
+    --green-dim: #2aa870;
+    --red:       #ff6b6b;
+    --red-dim:   #cc4444;
+    --blue:      #6eb5ff;
+    --muted:     #556080;
+    --text:      #c8d3f5;
+    --text-dim:  #7a8ab5;
+    --new-glow:  rgba(61, 220, 151, 0.08);
+    --repeat-glow: rgba(110, 181, 255, 0.05);
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --font-ui:   'Inter', 'Segoe UI', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--text-dim); font-weight: 400; font-size: 13px; margin-left: 8px; }
+
+  .header-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.6;
+  }
+  .header-meta b { color: var(--text-dim); }
+
+  /* ── TABS ───────────────────────────────────────────────── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 11px;
+    margin-left: 6px;
+    color: var(--text-dim);
+  }
+  .tab.active .tab-badge { background: var(--gold); color: #000; }
+
+  /* ── MAIN ───────────────────────────────────────────────── */
+  main { padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── STATS ROW ──────────────────────────────────────────── */
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 18px;
+    flex: 1;
+    min-width: 110px;
+  }
+  .stat-card .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; }
+  .stat-card .value { font-family: var(--font-mono); font-size: 22px; font-weight: 700; margin-top: 2px; }
+  .stat-card .value.gold  { color: var(--gold); }
+  .stat-card .value.green { color: var(--green); }
+  .stat-card .value.blue  { color: var(--blue); }
+
+  /* ── FILTER BAR ─────────────────────────────────────────── */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-bar input, .filter-bar select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 7px 12px;
+    font-size: 13px;
+    font-family: var(--font-ui);
+    outline: none;
+    transition: border-color .15s;
+  }
+  .filter-bar input:focus, .filter-bar select:focus { border-color: var(--gold); }
+  .filter-bar input { min-width: 180px; }
+  .filter-label { font-size: 12px; color: var(--text-dim); }
+
+  /* ── SIGNALS TABLE ──────────────────────────────────────── */
+  .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    background: var(--surface2);
+    color: var(--text-dim);
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    white-space: nowrap;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid var(--border);
+  }
+  thead th:hover { color: var(--gold); }
+  thead th.sorted { color: var(--gold); }
+  thead th .sort-icon { margin-left: 4px; opacity: .6; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .1s;
+    cursor: pointer;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  tbody tr.is-new    { background: var(--new-glow); }
+  tbody tr.is-repeat { background: var(--repeat-glow); }
+  tbody tr.is-new:hover    { background: rgba(61, 220, 151, 0.13); }
+  tbody tr.is-repeat:hover { background: rgba(110, 181, 255, 0.10); }
+
+  td {
+    padding: 9px 12px;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  .ticker-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ticker-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .new-badge {
+    font-size: 9px;
+    font-family: var(--font-ui);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: .05em;
+  }
+  .new-badge.new    { background: rgba(61,220,151,.18); color: var(--green); border: 1px solid rgba(61,220,151,.3); }
+  .new-badge.repeat { background: rgba(110,181,255,.12); color: var(--blue); border: 1px solid rgba(110,181,255,.25); }
+
+  .score-total {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .score-high   { color: var(--green); }
+  .score-mid    { color: var(--gold); }
+  .score-low    { color: var(--text-dim); }
+
+  .price-up   { color: var(--green); }
+  .price-down { color: var(--red); }
+  .col-stop   { color: var(--red); }
+  .col-t1     { color: var(--green); }
+  .col-t2     { color: #a8ff78; }
+  .col-rr     { color: var(--blue); }
+  .col-rsi    { color: var(--text-dim); }
+  .col-rs     { color: var(--text-dim); }
+
+  /* Watchlist button */
+  .btn-watch {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 3px 7px;
+    transition: all .15s;
+    line-height: 1;
+  }
+  .btn-watch:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-watch.watched { border-color: var(--gold); color: var(--gold); background: rgba(246,201,14,.1); }
+
+  /* ── SCORE BREAKDOWN BAR ────────────────────────────────── */
+  .score-bar {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    height: 16px;
+  }
+  .score-seg {
+    height: 100%;
+    border-radius: 2px;
+    min-width: 4px;
+    transition: opacity .2s;
+  }
+  .score-seg.filled   { background: var(--gold); }
+  .score-seg.partial  { background: var(--gold-dim); opacity: .55; }
+  .score-seg.empty    { background: var(--border); }
+
+  /* ── DETAIL DRAWER ──────────────────────────────────────── */
+  .drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 200;
+    backdrop-filter: blur(2px);
+  }
+  .drawer-overlay.open { display: block; }
+
+  .drawer {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: min(520px, 100vw);
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform .25s cubic-bezier(.4,0,.2,1);
+    overflow-y: auto;
+  }
+  .drawer.open { transform: translateX(0); }
+
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+  }
+  .drawer-ticker {
+    font-family: var(--font-mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .drawer-close {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .drawer-close:hover { color: var(--text); background: var(--surface2); }
+
+  .drawer-body { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+
+  .section-title {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .kv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .kv { background: var(--surface2); border-radius: 6px; padding: 10px 12px; }
+  .kv .k { font-size: 11px; color: var(--text-dim); margin-bottom: 2px; }
+  .kv .v { font-family: var(--font-mono); font-size: 15px; font-weight: 600; }
+
+  /* Score breakdown in drawer */
+  .score-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .sb-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sb-label {
+    width: 90px;
+    font-size: 12px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .sb-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .sb-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--gold);
+    transition: width .4s ease;
+  }
+  .sb-val {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--gold);
+    width: 28px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .sb-max { font-size: 11px; color: var(--muted); width: 24px; flex-shrink: 0; }
+
+  /* History table in drawer */
+  .history-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 11px; }
+  .history-table th {
+    color: var(--text-dim);
+    text-align: right;
+    padding: 5px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-table th:first-child { text-align: left; }
+  .history-table td {
+    padding: 6px 8px;
+    text-align: right;
+    border-bottom: 1px solid rgba(37,42,69,.5);
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .history-table td:first-child { text-align: left; color: var(--text-dim); }
+  .history-table tr:last-child td { border-bottom: none; }
+  .history-table tr.latest td { color: var(--text); }
+  .history-table .up   { color: var(--green); }
+  .history-table .down { color: var(--red); }
+
+  /* ── WATCHLIST PANEL ────────────────────────────────────── */
+  .watchlist-empty {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 60px 20px;
+    font-size: 14px;
+  }
+  .watchlist-empty .icon { font-size: 40px; margin-bottom: 12px; }
+
+  .wl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .wl-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .wl-card:hover { border-color: var(--gold); background: var(--surface2); }
+  .wl-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .wl-ticker { font-family: var(--font-mono); font-size: 16px; font-weight: 700; color: var(--gold); }
+  .wl-score  { font-family: var(--font-mono); font-size: 13px; }
+  .wl-history-mini { display: flex; gap: 4px; margin-top: 8px; }
+  .wl-day {
+    flex: 1;
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 5px 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-align: center;
+    color: var(--text-dim);
+  }
+  .wl-day .d-date { color: var(--muted); font-size: 9px; }
+  .wl-day .d-price { font-weight: 600; color: var(--text); }
+  .wl-day.active { background: rgba(246,201,14,.08); border: 1px solid rgba(246,201,14,.2); }
+
+  .btn-remove-watch {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 12px;
+    padding: 3px 8px;
+    transition: all .15s;
+  }
+  .btn-remove-watch:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── LOADING ────────────────────────────────────────────── */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 60px;
+    color: var(--text-dim);
+  }
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ─────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    main { padding: 12px; }
+    .stats-row { gap: 8px; }
+    .stat-card { padding: 10px 12px; min-width: 80px; }
+    .stat-card .value { font-size: 18px; }
+    td, th { padding: 8px 8px; }
+    .col-hide-mobile { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">VRSO <span>S&P 500 Scanner</span></div>
+  <div class="header-meta" id="header-meta">Laden…</div>
+</header>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" data-tab="signals">
+    Signals <span class="tab-badge" id="badge-signals">–</span>
+  </div>
+  <div class="tab" data-tab="watchlist">
+    Watchlist <span class="tab-badge" id="badge-watchlist">0</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- SIGNALS PANEL -->
+  <div class="panel active" id="panel-signals">
+    <div class="stats-row" id="stats-row"></div>
+
+    <div class="filter-bar">
+      <input type="text" id="search-input" placeholder="Zoek ticker…">
+      <select id="filter-status">
+        <option value="all">Alle signals</option>
+        <option value="new">Alleen nieuw</option>
+        <option value="repeat">Alleen herhaling</option>
+      </select>
+      <span class="filter-label" id="filter-count"></span>
+    </div>
+
+    <div id="signals-container">
+      <div class="loading"><div class="spinner"></div> Data laden…</div>
+    </div>
+  </div>
+
+  <!-- WATCHLIST PANEL -->
+  <div class="panel" id="panel-watchlist">
+    <div id="watchlist-container">
+      <div class="watchlist-empty">
+        <div class="icon">⭐</div>
+        Nog geen tickers op watchlist.<br>Klik op ★ naast een ticker om toe te voegen.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- DETAIL DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-ticker" id="drawer-ticker">–</div>
+    <button class="drawer-close" id="drawer-close">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let allSignals   = [];
+let watchlist    = JSON.parse(localStorage.getItem('vrso_watchlist') || '[]');
+let sortKey      = 'score';
+let sortDir      = -1;  // -1 = desc
+let activeTab    = 'signals';
+let searchQ      = '';
+let filterStatus = 'all';
+
+// Score component max values (for breakdown bars)
+const COMP_MAX = {
+  RSI: 2, Volume: 2, RS: 2, Body: 1, VolRising: 1, HigherLow: 1, VCP: 1
+};
+const COMP_LABELS = {
+  RSI: 'RSI Zone', Volume: 'Vol Dry', RS: 'RS Slope',
+  Body: 'Bullish Body', VolRising: 'Vol Rising', HigherLow: 'Higher Low', VCP: 'VCP'
+};
+
+// ═══════════════════════════════════════════════════════════
+// DATA LADEN
+// ═══════════════════════════════════════════════════════════
+async function loadData() {
+  try {
+    const r = await fetch('data/signals.json?t=' + Date.now());
+    const d = await r.json();
+    allSignals = d.signals || [];
+
+    // Header meta
+    document.getElementById('header-meta').innerHTML =
+      d.scan_date
+        ? `<b>Laatste scan:</b> ${d.scan_time || d.scan_date}<br>` +
+          `<b>Gescand:</b> ${d.total_scanned} tickers &nbsp;|&nbsp; ` +
+          `<b>Signals:</b> ${d.total_signals} &nbsp;|&nbsp; ` +
+          `<b>Nieuw:</b> ${d.new_signals}`
+        : 'Nog geen scan uitgevoerd';
+
+    // Stats cards
+    renderStats(d);
+    renderSignals();
+    renderWatchlist();
+    updateBadges();
+  } catch(e) {
+    document.getElementById('signals-container').innerHTML =
+      `<div class="loading" style="flex-direction:column;gap:8px">
+        <div style="font-size:24px">⚠️</div>
+        <div>signals.json niet gevonden</div>
+        <div style="font-size:11px;color:var(--muted)">Voer eerst de scanner uit</div>
+      </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// STATS ROW
+// ═══════════════════════════════════════════════════════════
+function renderStats(d) {
+  const avgScore = allSignals.length
+    ? (allSignals.reduce((s,x) => s + x.score, 0) / allSignals.length).toFixed(1)
+    : '–';
+  const topScore = allSignals.length ? allSignals[0].score.toFixed(1) : '–';
+
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card">
+      <div class="label">Totaal signals</div>
+      <div class="value gold">${d.total_signals || 0}</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Nieuw vandaag</div>
+      <div class="value green">${d.new_signals || 0}</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Gem. score</div>
+      <div class="value blue">${avgScore}</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Top score</div>
+      <div class="value gold">${topScore}</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Watchlist</div>
+      <div class="value" style="color:var(--text)">${watchlist.length}</div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SIGNALS TABLE
+// ═══════════════════════════════════════════════════════════
+function getFiltered() {
+  return allSignals.filter(s => {
+    if (searchQ && !s.ticker.includes(searchQ.toUpperCase())) return false;
+    if (filterStatus === 'new'    && !s.is_new)  return false;
+    if (filterStatus === 'repeat' &&  s.is_new)  return false;
+    return true;
+  }).sort((a,b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (typeof av === 'string') av = av.toLowerCase(), bv = bv.toLowerCase();
+    return sortDir * (av > bv ? 1 : av < bv ? -1 : 0);
+  });
+}
+
+function scoreClass(s) {
+  if (s >= 8) return 'score-high';
+  if (s >= 6) return 'score-mid';
+  return 'score-low';
+}
+
+function renderScoreBar(components) {
+  const keys = Object.keys(COMP_MAX);
+  return `<div class="score-bar">` +
+    keys.map(k => {
+      const val = components[k] || 0;
+      const max = COMP_MAX[k];
+      const cls = val >= max ? 'filled' : val > 0 ? 'partial' : 'empty';
+      return `<div class="score-seg ${cls}" title="${COMP_LABELS[k]}: ${val}/${max}" style="flex:${max}"></div>`;
+    }).join('') +
+  `</div>`;
+}
+
+function renderSignals() {
+  const filtered = getFiltered();
+  document.getElementById('filter-count').textContent =
+    `${filtered.length} van ${allSignals.length} getoond`;
+
+  if (!filtered.length) {
+    document.getElementById('signals-container').innerHTML =
+      `<div class="loading">Geen signals gevonden</div>`;
+    return;
+  }
+
+  const cols = [
+    { key:'ticker', label:'Ticker' },
+    { key:'score',  label:'Score' },
+    { key:'price',  label:'Prijs' },
+    { key:'stop',   label:'Stop' },
+    { key:'target1',label:'T1 (+12%)' },
+    { key:'target2',label:'T2 (+25%)' },
+    { key:'rr',     label:'R/R', hide:true },
+    { key:'rsi',    label:'RSI', hide:true },
+    { key:'rs',     label:'RS%', hide:true },
+    { key:'bar',    label:'Breakdown', nosort:true },
+    { key:'watch',  label:'', nosort:true },
+  ];
+
+  const thHTML = cols.map(c => {
+    const sorted = sortKey === c.key;
+    const arrow  = sorted ? (sortDir === -1 ? ' ↓' : ' ↑') : '';
+    const mob    = c.hide ? ' col-hide-mobile' : '';
+    const click  = c.nosort ? '' : `onclick="setSort('${c.key}')"`;
+    return `<th class="${sorted?'sorted':''}${mob}" ${click}>${c.label}<span class="sort-icon">${arrow}</span></th>`;
+  }).join('');
+
+  const rows = filtered.map(s => {
+    const isWatched = watchlist.includes(s.ticker);
+    const rowCls    = s.is_new ? 'is-new' : 'is-repeat';
+    const badge     = s.is_new
+      ? `<span class="new-badge new">NIEUW</span>`
+      : `<span class="new-badge repeat">DAG 2+</span>`;
+
+    return `
+    <tr class="${rowCls}" onclick="openDrawer('${s.ticker}')">
+      <td>
+        <div class="ticker-cell">
+          <span class="ticker-name">${s.ticker}</span>
+          ${badge}
+        </div>
+      </td>
+      <td><span class="score-total ${scoreClass(s.score)}">${s.score.toFixed(1)}</span></td>
+      <td class="price-up">$${s.price.toFixed(2)}</td>
+      <td class="col-stop">$${s.stop.toFixed(2)}<br><span style="font-size:10px;color:var(--muted)">-${s.stop_pct}%</span></td>
+      <td class="col-t1">$${s.target1.toFixed(2)}</td>
+      <td class="col-t2">$${s.target2.toFixed(2)}</td>
+      <td class="col-rr col-hide-mobile">${s.rr}:1</td>
+      <td class="col-rsi col-hide-mobile">${s.rsi}</td>
+      <td class="col-rs col-hide-mobile">${s.rs > 0 ? '+' : ''}${s.rs}%</td>
+      <td class="col-hide-mobile">${renderScoreBar(s.components)}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn-watch ${isWatched?'watched':''}"
+          onclick="toggleWatch('${s.ticker}', this)"
+          title="${isWatched?'Verwijder van watchlist':'Voeg toe aan watchlist'}">
+          ${isWatched ? '★' : '☆'}
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('signals-container').innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>${thHTML}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+}
+
+function setSort(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = -1; }
+  renderSignals();
+}
+
+// ═══════════════════════════════════════════════════════════
+// DETAIL DRAWER
+// ═══════════════════════════════════════════════════════════
+function openDrawer(ticker) {
+  const s = allSignals.find(x => x.ticker === ticker);
+  if (!s) return;
+
+  document.getElementById('drawer-ticker').textContent = ticker;
+
+  // Breakdown bars
+  const breakdown = Object.entries(COMP_MAX).map(([k, max]) => {
+    const val = s.components[k] || 0;
+    const pct = (val / max) * 100;
+    return `
+    <div class="sb-row">
+      <div class="sb-label">${COMP_LABELS[k]}</div>
+      <div class="sb-bar-wrap"><div class="sb-bar-fill" style="width:${pct}%"></div></div>
+      <div class="sb-val">${val}</div>
+      <div class="sb-max">/${max}</div>
+    </div>`;
+  }).join('');
+
+  // History table
+  const histRows = (s.history || []).map((h, i) => {
+    const isLatest = i === s.history.length - 1;
+    const chg = i > 0 ? ((h.close - s.history[i-1].close) / s.history[i-1].close * 100) : null;
+    const chgHTML = chg !== null
+      ? `<span class="${chg >= 0 ? 'up' : 'down'}">${chg >= 0 ? '+' : ''}${chg.toFixed(2)}%</span>`
+      : '–';
+    return `
+    <tr class="${isLatest ? 'latest' : ''}">
+      <td>${h.date}</td>
+      <td>$${h.open.toFixed(2)}</td>
+      <td>$${h.high.toFixed(2)}</td>
+      <td>$${h.low.toFixed(2)}</td>
+      <td class="${isLatest ? 'up' : ''}">$${h.close.toFixed(2)}</td>
+      <td>${chgHTML}</td>
+      <td>${h.rsi !== null ? h.rsi : '–'}</td>
+    </tr>`;
+  }).join('');
+
+  const isWatched = watchlist.includes(ticker);
+
+  document.getElementById('drawer-body').innerHTML = `
+    <!-- Score totaal + breakdown -->
+    <div>
+      <div class="section-title">Score breakdown — totaal ${s.score.toFixed(1)} / 10</div>
+      <div class="score-breakdown">${breakdown}</div>
+    </div>
+
+    <!-- Entry info -->
+    <div>
+      <div class="section-title">Entry plan</div>
+      <div class="kv-grid">
+        <div class="kv"><div class="k">Entry (huidig)</div><div class="v" style="color:var(--text)">$${s.price.toFixed(2)}</div></div>
+        <div class="kv"><div class="k">ATR</div><div class="v" style="color:var(--text-dim)">$${s.atr.toFixed(2)}</div></div>
+        <div class="kv"><div class="k">Stop loss</div><div class="v" style="color:var(--red)">$${s.stop.toFixed(2)} (-${s.stop_pct}%)</div></div>
+        <div class="kv"><div class="k">R/R ratio</div><div class="v" style="color:var(--blue)">${s.rr}:1</div></div>
+        <div class="kv"><div class="k">Target 1 (+12%)</div><div class="v" style="color:var(--green)">$${s.target1.toFixed(2)}</div></div>
+        <div class="kv"><div class="k">Target 2 (+25%)</div><div class="v" style="color:#a8ff78">$${s.target2.toFixed(2)}</div></div>
+      </div>
+    </div>
+
+    <!-- Indicators -->
+    <div>
+      <div class="section-title">Indicatoren</div>
+      <div class="kv-grid">
+        <div class="kv"><div class="k">RSI (14)</div><div class="v" style="color:var(--text-dim)">${s.rsi}</div></div>
+        <div class="kv"><div class="k">RS vs SPY</div><div class="v" style="color:${s.rs >= 0 ? 'var(--green)' : 'var(--red)'}">+${s.rs}%</div></div>
+        <div class="kv"><div class="k">EMA 21</div><div class="v" style="color:var(--text-dim)">$${s.ema21.toFixed(2)}</div></div>
+        <div class="kv"><div class="k">EMA 50</div><div class="v" style="color:var(--text-dim)">$${s.ema50.toFixed(2)}</div></div>
+        <div class="kv"><div class="k">EMA 200</div><div class="v" style="color:var(--text-dim)">$${s.ema200.toFixed(2)}</div></div>
+        <div class="kv"><div class="k">Status</div><div class="v" style="color:${s.is_new ? 'var(--green)' : 'var(--blue)'}">
+          ${s.is_new ? '🆕 Nieuw signal' : '🔁 Herhaling'}
+        </div></div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div>
+      <div class="section-title">Laatste 5 handelsdagen</div>
+      <div style="overflow-x:auto">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Datum</th><th>Open</th><th>High</th><th>Low</th>
+              <th>Close</th><th>Chg%</th><th>RSI</th>
+            </tr>
+          </thead>
+          <tbody>${histRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Watchlist actie -->
+    <div style="padding-bottom:10px">
+      <button
+        onclick="toggleWatch('${ticker}', this); updateDrawerWatch('${ticker}', this)"
+        style="width:100%;padding:11px;border-radius:8px;border:1px solid ${isWatched ? 'var(--red)' : 'var(--gold)'};
+               background:${isWatched ? 'rgba(255,107,107,.08)' : 'rgba(246,201,14,.08)'};
+               color:${isWatched ? 'var(--red)' : 'var(--gold)'};cursor:pointer;font-size:14px;font-weight:600;transition:all .15s"
+        id="drawer-watch-btn">
+        ${isWatched ? '★ Verwijder van watchlist' : '☆ Voeg toe aan watchlist'}
+      </button>
+    </div>
+  `;
+
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+function updateDrawerWatch(ticker, btn) {
+  const isWatched = watchlist.includes(ticker);
+  btn.textContent = isWatched ? '★ Verwijder van watchlist' : '☆ Voeg toe aan watchlist';
+  btn.style.borderColor = isWatched ? 'var(--red)' : 'var(--gold)';
+  btn.style.color = isWatched ? 'var(--red)' : 'var(--gold)';
+  btn.style.background = isWatched ? 'rgba(255,107,107,.08)' : 'rgba(246,201,14,.08)';
+}
+
+// ═══════════════════════════════════════════════════════════
+// WATCHLIST
+// ═══════════════════════════════════════════════════════════
+function toggleWatch(ticker, btn) {
+  const idx = watchlist.indexOf(ticker);
+  if (idx === -1) {
+    watchlist.push(ticker);
+    if (btn) { btn.textContent = '★'; btn.classList.add('watched'); }
+  } else {
+    watchlist.splice(idx, 1);
+    if (btn) { btn.textContent = '☆'; btn.classList.remove('watched'); }
+  }
+  localStorage.setItem('vrso_watchlist', JSON.stringify(watchlist));
+  updateBadges();
+  if (activeTab === 'watchlist') renderWatchlist();
+}
+
+function renderWatchlist() {
+  const cont = document.getElementById('watchlist-container');
+  if (!watchlist.length) {
+    cont.innerHTML = `
+      <div class="watchlist-empty">
+        <div class="icon">⭐</div>
+        Nog geen tickers op watchlist.<br>Klik op ☆ naast een ticker om toe te voegen.
+      </div>`;
+    return;
+  }
+
+  const cards = watchlist.map(ticker => {
+    const s = allSignals.find(x => x.ticker === ticker);
+    const scoreHTML = s
+      ? `<span class="wl-score ${scoreClass(s.score)}">${s.score.toFixed(1)}</span>`
+      : `<span class="wl-score" style="color:var(--muted)">–</span>`;
+
+    const histHTML = s && s.history ? s.history.map((h, i) => {
+      const isLatest = i === s.history.length - 1;
+      return `
+      <div class="wl-day ${isLatest ? 'active' : ''}">
+        <div class="d-date">${h.date.slice(5)}</div>
+        <div class="d-price">$${h.close.toFixed(0)}</div>
+      </div>`;
+    }).join('') : '';
+
+    return `
+    <div class="wl-card" onclick="openDrawer('${ticker}')">
+      <div class="wl-card-header">
+        <span class="wl-ticker">${ticker}</span>
+        <div style="display:flex;align-items:center;gap:10px">
+          ${scoreHTML}
+          <button class="btn-remove-watch"
+            onclick="event.stopPropagation();removeFromWatchlist('${ticker}')"
+            title="Verwijder">✕</button>
+        </div>
+      </div>
+      ${s ? `<div style="font-size:11px;color:var(--text-dim);margin-bottom:6px">
+        $${s.price.toFixed(2)} &nbsp;|&nbsp; Stop $${s.stop.toFixed(2)} &nbsp;|&nbsp; T1 $${s.target1.toFixed(2)}
+      </div>` : '<div style="font-size:11px;color:var(--muted);margin-bottom:6px">Niet in huidige scan</div>'}
+      ${histHTML ? `<div class="wl-history-mini">${histHTML}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  cont.innerHTML = `<div class="wl-grid">${cards}</div>`;
+}
+
+function removeFromWatchlist(ticker) {
+  const idx = watchlist.indexOf(ticker);
+  if (idx !== -1) watchlist.splice(idx, 1);
+  localStorage.setItem('vrso_watchlist', JSON.stringify(watchlist));
+  updateBadges();
+  renderWatchlist();
+  renderSignals(); // refresh star buttons
+}
+
+function updateBadges() {
+  const filtered = getFiltered();
+  document.getElementById('badge-signals').textContent = filtered.length;
+  document.getElementById('badge-watchlist').textContent = watchlist.length;
+}
+
+// ═══════════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════════
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    activeTab = tab.dataset.tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + activeTab).classList.add('active');
+    if (activeTab === 'watchlist') renderWatchlist();
+  });
+});
+
+// ═══════════════════════════════════════════════════════════
+// FILTER + SEARCH
+// ═══════════════════════════════════════════════════════════
+document.getElementById('search-input').addEventListener('input', e => {
+  searchQ = e.target.value;
+  renderSignals();
+  updateBadges();
+});
+
+document.getElementById('filter-status').addEventListener('change', e => {
+  filterStatus = e.target.value;
+  renderSignals();
+  updateBadges();
+});
+
+// ═══════════════════════════════════════════════════════════
+// DRAWER EVENTS
+// ═══════════════════════════════════════════════════════════
+document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+document.getElementById('drawer-overlay').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+loadData();
+</script>
+</body>
+</html>
