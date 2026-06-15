@@ -28,7 +28,7 @@ jobs:
 
       - name: Installeer dependencies
         run: |
-          pip install yfinance pandas numpy requests
+          pip install -r requirements.txt
 
       - name: Run scanner
         env:
