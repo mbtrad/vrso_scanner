@@ -203,7 +203,7 @@ COMPANY_NAMES = {
     "NKE":"Nike","NOV":"NOV Inc","NRG":"NRG Energy","NTAP":"NetApp",
     "NUE":"Nucor","NVDA":"Nvidia","NVR":"NVR Inc","NWSA":"News Corp A",
     "NWS":"News Corp B","NXPI":"NXP Semi","O":"Realty Income","ODFL":"Old Dominion",
-    "OKE":"ONEOK","OMC","Omnicom":"OMC","ON":"ON Semiconductor","OXY":"Occidental",
+    "OKE":"ONEOK","OMC":"Omnicom","ON":"ON Semiconductor","OXY":"Occidental",
     "ORCL":"Oracle","OTIS":"Otis Worldwide","ORLY":"O'Reilly Auto",
     "PCAR":"Paccar","PAYC":"Paycom","PAYX":"Paychex","PCG":"PG&E",
     "PEG":"PSEG","PEP":"PepsiCo","PFE":"Pfizer","PFG":"Principal Financial",
