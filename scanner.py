@@ -59,7 +59,7 @@ CONFIG = {
     "atr_multiplier": 2.0,
     "max_stop_pct": 0.10,
     "min_score": 5.0,
-    "lookback_days": 365,   # data ophalen voor indicatoren
+    "lookback_days": 550,   # ruim genoeg voor EMA200 warmup na dropna (~200 handelsdagen = ~280 kalenderdagen + buffer)
     "history_days": 5,      # hoeveel handelsdagen history tonen
 }
 
@@ -365,7 +365,7 @@ def run_scanner():
                     else:
                         continue
                     df.dropna(subset=["Close", "High", "Low", "Open", "Volume"], inplace=True)
-                    if len(df) >= 250:
+                    if len(df) >= 200:
                         all_data[ticker] = df
                 except Exception:
                     continue
