@@ -847,6 +847,56 @@ function openDrawer(ticker) {
       </div>
     </div>
 
+    <!-- Pivot Points -->
+    <div>
+      <div class="section-title">Pivot Points</div>
+      ${(() => {
+        const p = s.pivots || {};
+        const price = s.price;
+        const renderTable = (label, pv) => {
+          if (!pv) return '';
+          const levels = [
+            { key:'R2', label:'R2', val:pv.R2, type:'resist' },
+            { key:'R1', label:'R1', val:pv.R1, type:'resist' },
+            { key:'P',  label:'Pivot', val:pv.P, type:'pivot' },
+            { key:'S1', label:'S1', val:pv.S1, type:'support' },
+            { key:'S2', label:'S2', val:pv.S2, type:'support' },
+          ];
+          const rows = levels.map(l => {
+            const dist = ((l.val - price) / price * 100).toFixed(1);
+            const distSign = l.val >= price ? '+' : '';
+            const color = l.type === 'resist' ? 'var(--red)' 
+                        : l.type === 'support' ? 'var(--green)' 
+                        : 'var(--gold)';
+            const isCurrent = Math.abs(l.val - price) / price < 0.005;
+            return \`<tr style="\${isCurrent ? 'background:rgba(246,201,14,.08)' : ''}">
+              <td style="padding:6px 10px;color:\${color};font-weight:600;font-family:var(--font-mono)">\${l.label}</td>
+              <td style="padding:6px 10px;font-family:var(--font-mono);color:var(--text)">$\${l.val.toFixed(2)}</td>
+              <td style="padding:6px 10px;font-family:var(--font-mono);color:\${l.val >= price ? 'var(--red)' : 'var(--green)'}">
+                \${distSign}\${dist}%
+              </td>
+            </tr>\`;
+          }).join('');
+          return \`
+          <div style="margin-bottom:12px">
+            <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;font-weight:600">\${label}</div>
+            <table style="width:100%;border-collapse:collapse;background:var(--surface2);border-radius:6px;overflow:hidden">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border)">
+                  <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Level</th>
+                  <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Prijs</th>
+                  <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Afstand</th>
+                </tr>
+              </thead>
+              <tbody>\${rows}</tbody>
+            </table>
+          </div>\`;
+        };
+        return renderTable('Vorige Week', p.weekly) + renderTable('Vorige Maand', p.monthly)
+          || '<div style="color:var(--muted);font-size:12px">Geen pivot data beschikbaar</div>';
+      })()}
+    </div>
+
     <!-- History -->
     <div>
       <div class="section-title">Laatste 5 handelsdagen</div>
