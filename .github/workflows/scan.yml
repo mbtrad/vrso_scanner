@@ -2,8 +2,8 @@ name: VRSO Daily Scanner
 
 on:
   schedule:
-    # 21:30 UTC = 16:30 ET (na market close)
-    - cron: '30 21 * * 1-5'   # maandag t/m vrijdag
+    # 04:00 UTC = 06:00 NL tijd = ochtend voor marktopen, data vorige dag gegarandeerd beschikbaar
+    - cron: '0 4 * * 2-6'
 
   # Handmatig starten via GitHub website (knop "Run workflow")
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Installeer dependencies
         run: |
-          pip install -r requirements.txt
+          pip install yfinance pandas numpy requests
 
       - name: Run scanner
         env:
