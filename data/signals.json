@@ -1,12 +1,13 @@
 {
-  "scan_time": "2026-06-16 07:54 UTC",
+  "scan_time": "2026-06-16 08:30 UTC",
   "scan_date": "2026-06-16",
   "total_scanned": 478,
   "total_signals": 95,
-  "new_signals": 95,
+  "new_signals": 0,
   "signals": [
     {
       "ticker": "TGT",
+      "name": "Target",
       "score": 9.0,
       "components": {
         "RSI": 2.0,
@@ -77,10 +78,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "AIZ",
+      "name": "Assurant",
       "score": 8.5,
       "components": {
         "RSI": 2.0,
@@ -151,10 +153,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "ADI",
+      "name": "Analog Devices",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -225,10 +228,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CDNS",
+      "name": "Cadence",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -299,10 +303,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CNC",
+      "name": "Centene",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -373,10 +378,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CFG",
+      "name": "Citizens Financial",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -447,10 +453,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "BEN",
+      "name": "Franklin Templeton",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -521,10 +528,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "DOC",
+      "name": "Healthpeak",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -595,10 +603,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "IVZ",
+      "name": "Invesco",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -669,10 +678,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "JBL",
+      "name": "Jabil",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -743,10 +753,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "MS",
+      "name": "Morgan Stanley",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -817,10 +828,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "NOV",
+      "name": "NOV Inc",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -891,10 +903,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "PLD",
+      "name": "Prologis",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -965,10 +978,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "TXN",
+      "name": "Texas Instruments",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -1039,10 +1053,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "UDR",
+      "name": "UDR Inc",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -1113,10 +1128,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "UNP",
+      "name": "Union Pacific",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -1187,10 +1203,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "UAL",
+      "name": "United Airlines",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -1261,10 +1278,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "VTRS",
+      "name": "Viatris",
       "score": 8.0,
       "components": {
         "RSI": 2.0,
@@ -1335,10 +1353,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "DVA",
+      "name": "DaVita",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1409,10 +1428,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "EXPD",
+      "name": "Expeditors",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1483,10 +1503,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "F",
+      "name": "Ford",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1557,10 +1578,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "INVH",
+      "name": "Invitation Homes",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1631,10 +1653,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "RL",
+      "name": "Ralph Lauren",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1705,10 +1728,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "ROK",
+      "name": "Rockwell Automation",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1779,10 +1803,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "TFX",
+      "name": "Teleflex",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1853,10 +1878,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "WST",
+      "name": "West Pharma",
       "score": 7.5,
       "components": {
         "RSI": 2.0,
@@ -1927,10 +1953,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CARR",
+      "name": "CARR",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2001,10 +2028,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CSX",
+      "name": "CSX Corp",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2075,10 +2103,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CMI",
+      "name": "Cummins",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2149,10 +2178,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "DAL",
+      "name": "Delta Air",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2223,10 +2253,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "EQR",
+      "name": "Equity Residential",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2297,10 +2328,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "FDX",
+      "name": "FedEx",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2371,10 +2403,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "FTNT",
+      "name": "Fortinet",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2445,10 +2478,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "GL",
+      "name": "Globe Life",
       "score": 7.0,
       "components": {
         "RSI": 1.0,
@@ -2519,10 +2553,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "HAL",
+      "name": "Halliburton",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2593,10 +2628,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "IEX",
+      "name": "IDEX Corp",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2667,10 +2703,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "JPM",
+      "name": "JPMorgan",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2741,10 +2778,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "KEYS",
+      "name": "Keysight",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2815,10 +2853,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "MAR",
+      "name": "Marriott",
       "score": 7.0,
       "components": {
         "RSI": 1.0,
@@ -2889,10 +2928,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "MTCH",
+      "name": "Match Group",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -2963,10 +3003,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "MET",
+      "name": "MetLife",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -3037,10 +3078,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "RVTY",
+      "name": "Revvity",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -3111,10 +3153,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "SLB",
+      "name": "Schlumberger",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -3185,10 +3228,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "LUV",
+      "name": "Southwest Airlines",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -3259,10 +3303,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "SYF",
+      "name": "Synchrony",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -3333,10 +3378,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "UNH",
+      "name": "UnitedHealth",
       "score": 7.0,
       "components": {
         "RSI": 2.0,
@@ -3407,10 +3453,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "FRT",
+      "name": "Federal Realty",
       "score": 6.5,
       "components": {
         "RSI": 1.0,
@@ -3481,10 +3528,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "MAS",
+      "name": "Masco",
       "score": 6.5,
       "components": {
         "RSI": 1.0,
@@ -3555,10 +3603,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "SWK",
+      "name": "Stanley Black & Decker",
       "score": 6.5,
       "components": {
         "RSI": 1.0,
@@ -3629,10 +3678,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "BAC",
+      "name": "Bank of America",
       "score": 6.0,
       "components": {
         "RSI": 0.0,
@@ -3703,10 +3753,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "BCH",
+      "name": "Banco de Chile",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -3777,10 +3828,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CPT",
+      "name": "Camden Property",
       "score": 6.0,
       "components": {
         "RSI": 0.0,
@@ -3851,10 +3903,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "GM",
+      "name": "General Motors",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -3925,10 +3978,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "GS",
+      "name": "Goldman Sachs",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -3999,10 +4053,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "HLT",
+      "name": "Hilton",
       "score": 6.0,
       "components": {
         "RSI": 1.0,
@@ -4073,10 +4128,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "HUM",
+      "name": "Humana",
       "score": 6.0,
       "components": {
         "RSI": 0.0,
@@ -4147,10 +4203,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "IRM",
+      "name": "Iron Mountain",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4221,10 +4278,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "KEY",
+      "name": "KeyCorp",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4295,10 +4353,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "MDLZ",
+      "name": "Mondelez",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4369,10 +4428,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "NUE",
+      "name": "Nucor",
       "score": 6.0,
       "components": {
         "RSI": 0.0,
@@ -4443,10 +4503,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "PFG",
+      "name": "Principal Financial",
       "score": 6.0,
       "components": {
         "RSI": 0.0,
@@ -4517,10 +4578,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "RF",
+      "name": "Regions Financial",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4591,10 +4653,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "TRGP",
+      "name": "Targa Resources",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4665,10 +4728,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "TFC",
+      "name": "Truist Financial",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4739,10 +4803,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "USB",
+      "name": "U.S. Bancorp",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4813,10 +4878,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "UPS",
+      "name": "UPS",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4887,10 +4953,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "WAT",
+      "name": "Waters Corp",
       "score": 6.0,
       "components": {
         "RSI": 2.0,
@@ -4961,10 +5028,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "APH",
+      "name": "Amphenol",
       "score": 5.5,
       "components": {
         "RSI": 2.0,
@@ -5035,10 +5103,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "C",
+      "name": "Citigroup",
       "score": 5.5,
       "components": {
         "RSI": 1.0,
@@ -5109,10 +5178,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "IFF",
+      "name": "IFF",
       "score": 5.5,
       "components": {
         "RSI": 2.0,
@@ -5183,10 +5253,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "ROST",
+      "name": "Ross Stores",
       "score": 5.5,
       "components": {
         "RSI": 2.0,
@@ -5257,10 +5328,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "GWW",
+      "name": "Grainger",
       "score": 5.5,
       "components": {
         "RSI": 0.0,
@@ -5331,10 +5403,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CAT",
+      "name": "Caterpillar",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -5405,10 +5478,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "CVS",
+      "name": "CVS Health",
       "score": 5.0,
       "components": {
         "RSI": 1.0,
@@ -5479,10 +5553,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "ESS",
+      "name": "Essex Property",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -5553,10 +5628,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "ETSY",
+      "name": "Etsy",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -5627,10 +5703,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "FITB",
+      "name": "Fifth Third",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -5701,10 +5778,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "FOXA",
+      "name": "Fox Corp A",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -5775,10 +5853,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "FOX",
+      "name": "Fox Corp",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -5849,10 +5928,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "HST",
+      "name": "Host Hotels",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -5923,10 +6003,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "INCY",
+      "name": "Incyte",
       "score": 5.0,
       "components": {
         "RSI": 1.0,
@@ -5997,10 +6078,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "JBHT",
+      "name": "J.B. Hunt",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -6071,10 +6153,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "LLY",
+      "name": "Eli Lilly",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -6145,10 +6228,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "MPC",
+      "name": "Marathon Petroleum",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -6219,10 +6303,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "ODFL",
+      "name": "Old Dominion",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -6293,10 +6378,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "PNC",
+      "name": "PNC Financial",
       "score": 5.0,
       "components": {
         "RSI": 1.0,
@@ -6367,10 +6453,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "PPG",
+      "name": "PPG Industries",
       "score": 5.0,
       "components": {
         "RSI": 1.0,
@@ -6441,10 +6528,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "QRVO",
+      "name": "Qorvo",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -6515,10 +6603,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "PWR",
+      "name": "Quanta Services",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -6589,10 +6678,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "SPG",
+      "name": "Simon Property",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -6663,10 +6753,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "STT",
+      "name": "State Street",
       "score": 5.0,
       "components": {
         "RSI": 1.0,
@@ -6737,10 +6828,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "STLD",
+      "name": "Steel Dynamics",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -6811,10 +6903,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "TROW",
+      "name": "T. Rowe Price",
       "score": 5.0,
       "components": {
         "RSI": 1.0,
@@ -6885,10 +6978,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "URI",
+      "name": "United Rentals",
       "score": 5.0,
       "components": {
         "RSI": 0.0,
@@ -6959,10 +7053,11 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     },
     {
       "ticker": "VLO",
+      "name": "Valero",
       "score": 5.0,
       "components": {
         "RSI": 2.0,
@@ -7033,7 +7128,7 @@
         }
       ],
       "scan_date": "2026-06-16",
-      "is_new": true
+      "is_new": false
     }
   ]
 }
