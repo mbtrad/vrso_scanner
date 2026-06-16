@@ -655,7 +655,7 @@ def run_scanner():
     }
 
     with open(signals_path, "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, separators=(',', ':'))  # geen spaties = kleiner bestand
 
     print(f"✅ signals.json opgeslagen: {len(signals)} signals")
 
