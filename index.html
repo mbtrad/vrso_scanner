@@ -563,6 +563,56 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════
+// PIVOT HTML BUILDER
+// ═══════════════════════════════════════════════════════════
+function buildPivotHTML(pivots, price) {
+  const p = pivots || {};
+  const sections = [
+    { label: 'Vorige Week',  data: p.weekly  },
+    { label: 'Vorige Maand', data: p.monthly },
+  ];
+
+  const levelDefs = [
+    { key:'R2', type:'resist' },
+    { key:'R1', type:'resist' },
+    { key:'P',  type:'pivot'  },
+    { key:'S1', type:'support'},
+    { key:'S2', type:'support'},
+  ];
+
+  let html = '';
+  sections.forEach(({ label, data }) => {
+    if (!data) return;
+    const rows = levelDefs.map(({ key, type }) => {
+      const val  = data[key];
+      const dist = ((val - price) / price * 100).toFixed(1);
+      const sign = val >= price ? '+' : '';
+      const color = type === 'resist' ? 'var(--red)' : type === 'support' ? 'var(--green)' : 'var(--gold)';
+      const distColor = val >= price ? 'var(--red)' : 'var(--green)';
+      const hl = Math.abs(val - price) / price < 0.005 ? 'background:rgba(246,201,14,.08)' : '';
+      return `<tr style="${hl}">
+        <td style="padding:6px 10px;color:${color};font-weight:600;font-family:var(--font-mono)">${key === 'P' ? 'Pivot' : key}</td>
+        <td style="padding:6px 10px;font-family:var(--font-mono);color:var(--text)">$${val.toFixed(2)}</td>
+        <td style="padding:6px 10px;font-family:var(--font-mono);color:${distColor}">${sign}${dist}%</td>
+      </tr>`;
+    }).join('');
+    html += `
+    <div style="margin-bottom:12px">
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;font-weight:600">${label}</div>
+      <table style="width:100%;border-collapse:collapse;background:var(--surface2);border-radius:6px;overflow:hidden">
+        <thead><tr style="border-bottom:1px solid var(--border)">
+          <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Level</th>
+          <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Prijs</th>
+          <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Afstand</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  });
+  return html || '<div style="color:var(--muted);font-size:12px">Geen pivot data beschikbaar</div>';
+}
+
+// ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
 let allSignals   = [];
@@ -690,12 +740,14 @@ function renderSignals() {
   document.getElementById('filter-count').textContent =
     `${filtered.length} van ${allSignals.length} getoond`;
 
+  const container = document.getElementById('signals-container');
+
   if (!filtered.length) {
-    document.getElementById('signals-container').innerHTML =
-      `<div class="loading">Geen signals gevonden</div>`;
+    container.innerHTML = `<div class="loading">Geen signals gevonden</div>`;
     return;
   }
 
+  // Bouw tabel header
   const cols = [
     { key:'ticker', label:'Ticker' },
     { key:'score',  label:'Score' },
@@ -718,21 +770,36 @@ function renderSignals() {
     return `<th class="${sorted?'sorted':''}${mob}" ${click}>${c.label}<span class="sort-icon">${arrow}</span></th>`;
   }).join('');
 
-  const rows = filtered.map(s => {
+  // Maak tabel skelet
+  container.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>${thHTML}</tr></thead>
+        <tbody id="signals-tbody"></tbody>
+      </table>
+    </div>`;
+
+  const tbody = document.getElementById('signals-tbody');
+  const fragment = document.createDocumentFragment();
+
+  filtered.forEach(s => {
     const isWatched = watchlist.includes(s.ticker);
-    const rowCls    = s.is_new ? 'is-new' : 'is-repeat';
-    const badge     = s.is_new
+    const tr = document.createElement('tr');
+    tr.className = s.is_new ? 'is-new' : 'is-repeat';
+    tr.onclick = () => openDrawer(s.ticker);
+
+    const badge = s.is_new
       ? `<span class="new-badge new">NIEUW</span>`
       : `<span class="new-badge repeat">DAG 2+</span>`;
 
-    return `
-    <tr class="${rowCls}" onclick="openDrawer('${s.ticker}')">
+    const nameHtml = s.name && s.name !== s.ticker
+      ? `<div style="font-size:10px;color:var(--text-dim);font-family:var(--font-ui);margin-top:1px">${s.name}</div>`
+      : '';
+
+    tr.innerHTML = `
       <td>
         <div class="ticker-cell">
-          <div>
-            <span class="ticker-name">${s.ticker}</span>
-            ${s.name && s.name !== s.ticker ? `<div style="font-size:10px;color:var(--text-dim);font-family:var(--font-ui);margin-top:1px">${s.name}</div>` : ''}
-          </div>
+          <div><span class="ticker-name">${s.ticker}</span>${nameHtml}</div>
           ${badge}
         </div>
       </td>
@@ -751,17 +818,12 @@ function renderSignals() {
           title="${isWatched?'Verwijder van watchlist':'Voeg toe aan watchlist'}">
           ${isWatched ? '★' : '☆'}
         </button>
-      </td>
-    </tr>`;
-  }).join('');
+      </td>`;
 
-  document.getElementById('signals-container').innerHTML = `
-    <div class="table-wrap">
-      <table>
-        <thead><tr>${thHTML}</tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
+    fragment.appendChild(tr);
+  });
+
+  tbody.appendChild(fragment);
 }
 
 function setSort(key) {
@@ -853,51 +915,7 @@ function openDrawer(ticker) {
     <!-- Pivot Points -->
     <div>
       <div class="section-title">Pivot Points</div>
-      ${(() => {
-        const p = s.pivots || {};
-        const price = s.price;
-        const renderTable = (label, pv) => {
-          if (!pv) return '';
-          const levels = [
-            { key:'R2', label:'R2', val:pv.R2, type:'resist' },
-            { key:'R1', label:'R1', val:pv.R1, type:'resist' },
-            { key:'P',  label:'Pivot', val:pv.P, type:'pivot' },
-            { key:'S1', label:'S1', val:pv.S1, type:'support' },
-            { key:'S2', label:'S2', val:pv.S2, type:'support' },
-          ];
-          const rows = levels.map(l => {
-            const dist = ((l.val - price) / price * 100).toFixed(1);
-            const distSign = l.val >= price ? '+' : '';
-            const color = l.type === 'resist' ? 'var(--red)' 
-                        : l.type === 'support' ? 'var(--green)' 
-                        : 'var(--gold)';
-            const isCurrent = Math.abs(l.val - price) / price < 0.005;
-            return \`<tr style="\${isCurrent ? 'background:rgba(246,201,14,.08)' : ''}">
-              <td style="padding:6px 10px;color:\${color};font-weight:600;font-family:var(--font-mono)">\${l.label}</td>
-              <td style="padding:6px 10px;font-family:var(--font-mono);color:var(--text)">$\${l.val.toFixed(2)}</td>
-              <td style="padding:6px 10px;font-family:var(--font-mono);color:\${l.val >= price ? 'var(--red)' : 'var(--green)'}">
-                \${distSign}\${dist}%
-              </td>
-            </tr>\`;
-          }).join('');
-          return \`
-          <div style="margin-bottom:12px">
-            <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;font-weight:600">\${label}</div>
-            <table style="width:100%;border-collapse:collapse;background:var(--surface2);border-radius:6px;overflow:hidden">
-              <thead>
-                <tr style="border-bottom:1px solid var(--border)">
-                  <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Level</th>
-                  <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Prijs</th>
-                  <th style="padding:5px 10px;text-align:left;font-size:10px;color:var(--muted);text-transform:uppercase">Afstand</th>
-                </tr>
-              </thead>
-              <tbody>\${rows}</tbody>
-            </table>
-          </div>\`;
-        };
-        return renderTable('Vorige Week', p.weekly) + renderTable('Vorige Maand', p.monthly)
-          || '<div style="color:var(--muted);font-size:12px">Geen pivot data beschikbaar</div>';
-      })()}
+      ${buildPivotHTML(s.pivots, s.price)}
     </div>
 
     <!-- History -->
