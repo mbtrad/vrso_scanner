@@ -447,7 +447,69 @@ def build_history(df, n=5):
     return rows
 
 # ─────────────────────────────────────────────────────────────
-# MAIN SCANNER
+# PIVOT POINTS — weekly en monthly
+# ─────────────────────────────────────────────────────────────
+def calc_pivots(df):
+    """
+    Berekent klassieke pivot points op basis van de vorige week en vorige maand.
+    Pivot = (H + L + C) / 3
+    R1 = 2*P - L  |  R2 = P + (H - L)
+    S1 = 2*P - H  |  S2 = P - (H - L)
+    """
+    result = {}
+
+    try:
+        # ── Weekly pivot (vorige volledige week) ─────────────
+        df_copy = df.copy()
+        df_copy.index = pd.to_datetime(df_copy.index)
+
+        # Resample naar weken
+        weekly = df_copy.resample("W").agg({
+            "High":  "max",
+            "Low":   "min",
+            "Close": "last",
+        }).dropna()
+
+        if len(weekly) >= 2:
+            prev_week = weekly.iloc[-2]  # vorige afgesloten week
+            ph = float(prev_week["High"])
+            pl = float(prev_week["Low"])
+            pc = float(prev_week["Close"])
+            wp = round((ph + pl + pc) / 3, 2)
+            result["weekly"] = {
+                "P":  wp,
+                "R1": round(2 * wp - pl, 2),
+                "R2": round(wp + (ph - pl), 2),
+                "S1": round(2 * wp - ph, 2),
+                "S2": round(wp - (ph - pl), 2),
+            }
+
+        # ── Monthly pivot (vorige volledige maand) ───────────
+        monthly = df_copy.resample("ME").agg({
+            "High":  "max",
+            "Low":   "min",
+            "Close": "last",
+        }).dropna()
+
+        if len(monthly) >= 2:
+            prev_month = monthly.iloc[-2]  # vorige afgesloten maand
+            mh = float(prev_month["High"])
+            ml = float(prev_month["Low"])
+            mc = float(prev_month["Close"])
+            mp = round((mh + ml + mc) / 3, 2)
+            result["monthly"] = {
+                "P":  mp,
+                "R1": round(2 * mp - ml, 2),
+                "R2": round(mp + (mh - ml), 2),
+                "S1": round(2 * mp - mh, 2),
+                "S2": round(mp - (mh - ml), 2),
+            }
+
+    except Exception:
+        pass
+
+    return result
+
 # ─────────────────────────────────────────────────────────────
 def run_scanner():
     today     = datetime.now().strftime("%Y-%m-%d")
@@ -522,6 +584,7 @@ def run_scanner():
                 continue
 
             history = build_history(df, n=CONFIG["history_days"])
+            pivots  = calc_pivots(df)
 
             signals.append({
                 "ticker":     ticker,
@@ -541,6 +604,7 @@ def run_scanner():
                 "rr":         result["rr"],
                 "atr":        result["atr"],
                 "history":    history,
+                "pivots":     pivots,
                 "scan_date":  today,
             })
         except Exception:
