@@ -587,7 +587,10 @@ const COMP_LABELS = {
 // ═══════════════════════════════════════════════════════════
 async function loadData() {
   try {
-    const r = await fetch('data/signals.json?t=' + Date.now());
+    // Cache bust alleen op datum, niet elke pageload — voorkomt onnodige downloads
+    const today = new Date().toISOString().slice(0, 10);
+    const r = await fetch('data/signals.json?d=' + today);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
     allSignals = d.signals || [];
 
