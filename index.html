@@ -485,6 +485,136 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* ── JOURNAL ────────────────────────────────────────────── */
+  .trade-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .trade-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .trade-ticker {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .trade-meta {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .trade-levels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .trade-level {
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .trade-level .tl-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-bottom: 3px;
+  }
+  .trade-level .tl-val {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .trade-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  .btn-outcome {
+    flex: 1;
+    min-width: 80px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 12px;
+    font-family: var(--font-ui);
+    transition: all .15s;
+    text-align: center;
+  }
+  .btn-outcome:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-outcome.stop  { border-color: var(--red-dim); color: var(--red); }
+  .btn-outcome.t1    { border-color: var(--green-dim); color: var(--green); }
+  .btn-outcome.t2    { border-color: #a8ff78; color: #a8ff78; }
+  .btn-outcome.manual { border-color: var(--blue); color: var(--blue); }
+  .btn-delete-trade {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 11px;
+    padding: 4px 8px;
+    transition: all .15s;
+  }
+  .btn-delete-trade:hover { border-color: var(--red); color: var(--red); }
+  .outcome-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+  .outcome-stop   { background: rgba(255,107,107,.15); color: var(--red); }
+  .outcome-t1     { background: rgba(61,220,151,.15);  color: var(--green); }
+  .outcome-t2     { background: rgba(168,255,120,.15); color: #a8ff78; }
+  .outcome-manual { background: rgba(110,181,255,.15); color: var(--blue); }
+  .pnl-pos { color: var(--green); font-family: var(--font-mono); font-weight: 700; }
+  .pnl-neg { color: var(--red);   font-family: var(--font-mono); font-weight: 700; }
+
+  /* Manual close input */
+  .manual-close-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    align-items: center;
+  }
+  .manual-close-row input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 6px 10px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    width: 120px;
+    outline: none;
+  }
+  .manual-close-row input:focus { border-color: var(--gold); }
+  .btn-confirm {
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--gold);
+    background: rgba(246,201,14,.1);
+    color: var(--gold);
+    cursor: pointer;
+    font-size: 12px;
+  }
+
   /* ── RESPONSIVE ─────────────────────────────────────────── */
   @media (max-width: 640px) {
     main { padding: 12px; }
@@ -511,6 +641,9 @@
   </div>
   <div class="tab" data-tab="watchlist">
     Watchlist <span class="tab-badge" id="badge-watchlist">0</span>
+  </div>
+  <div class="tab" data-tab="journal">
+    Trade Journal <span class="tab-badge" id="badge-journal">0</span>
   </div>
 </div>
 
@@ -544,6 +677,37 @@
         Nog geen tickers op watchlist.<br>Klik op ★ naast een ticker om toe te voegen.
       </div>
     </div>
+  </div>
+
+  <!-- JOURNAL PANEL -->
+  <div class="panel" id="panel-journal">
+
+    <!-- Stats balk -->
+    <div class="stats-row" id="journal-stats"></div>
+
+    <!-- Open trades -->
+    <div style="margin-bottom:24px">
+      <div style="font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:10px">
+        Open trades
+      </div>
+      <div id="journal-open">
+        <div class="watchlist-empty" style="padding:30px">
+          <div class="icon">📋</div>
+          Nog geen open trades.<br>Voeg een trade toe vanuit een ticker drawer.
+        </div>
+      </div>
+    </div>
+
+    <!-- Gesloten trades -->
+    <div>
+      <div style="font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:10px">
+        Gesloten trades
+      </div>
+      <div id="journal-closed">
+        <div style="color:var(--muted);font-size:13px;padding:16px 0">Nog geen gesloten trades.</div>
+      </div>
+    </div>
+
   </div>
 
 </main>
@@ -934,8 +1098,8 @@ function openDrawer(ticker) {
       </div>
     </div>
 
-    <!-- Watchlist actie -->
-    <div style="padding-bottom:10px">
+    <!-- Watchlist + Journal actie -->
+    <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:10px">
       <button
         onclick="toggleWatch('${ticker}', this); updateDrawerWatch('${ticker}', this)"
         style="width:100%;padding:11px;border-radius:8px;border:1px solid ${isWatched ? 'var(--red)' : 'var(--gold)'};
@@ -943,6 +1107,13 @@ function openDrawer(ticker) {
                color:${isWatched ? 'var(--red)' : 'var(--gold)'};cursor:pointer;font-size:14px;font-weight:600;transition:all .15s"
         id="drawer-watch-btn">
         ${isWatched ? '★ Verwijder van watchlist' : '☆ Voeg toe aan watchlist'}
+      </button>
+      <button
+        onclick="addToJournal('${ticker}')"
+        style="width:100%;padding:11px;border-radius:8px;border:1px solid var(--green);
+               background:rgba(61,220,151,.08);color:var(--green);
+               cursor:pointer;font-size:14px;font-weight:600;transition:all .15s">
+        + Voeg toe aan trade journal
       </button>
     </div>
   `;
@@ -1041,6 +1212,204 @@ function updateBadges() {
   const filtered = getFiltered();
   document.getElementById('badge-signals').textContent = filtered.length;
   document.getElementById('badge-watchlist').textContent = watchlist.length;
+  document.getElementById('badge-journal').textContent = journal.filter(t => !t.closed).length;
+}
+
+// ═══════════════════════════════════════════════════════════
+// TRADE JOURNAL
+// ═══════════════════════════════════════════════════════════
+let journal = JSON.parse(localStorage.getItem('vrso_journal') || '[]');
+
+function saveJournal() {
+  localStorage.setItem('vrso_journal', JSON.stringify(journal));
+  updateBadges();
+}
+
+function addToJournal(ticker) {
+  const s = allSignals.find(x => x.ticker === ticker);
+  if (!s) return alert('Ticker niet in huidige scan gevonden.');
+
+  const already = journal.find(t => t.ticker === ticker && !t.closed);
+  if (already) {
+    alert(`${ticker} staat al als open trade in het journal.`);
+    return;
+  }
+
+  journal.push({
+    id:        Date.now(),
+    ticker:    ticker,
+    name:      s.name || ticker,
+    entry:     s.price,
+    stop:      s.stop,
+    target1:   s.target1,
+    target2:   s.target2,
+    score:     s.score,
+    date:      new Date().toISOString().slice(0, 10),
+    closed:    false,
+    closePrice: null,
+    closeDate:  null,
+    outcome:    null,
+    pnl:        null,
+  });
+
+  saveJournal();
+  closeDrawer();
+
+  // Switch naar journal tab
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-tab="journal"]').classList.add('active');
+  document.getElementById('panel-journal').classList.add('active');
+  activeTab = 'journal';
+  renderJournal();
+}
+
+function closeTrade(id, outcome, manualPrice) {
+  const trade = journal.find(t => t.id === id);
+  if (!trade) return;
+
+  let closePrice;
+  if (outcome === 'stop')   closePrice = trade.stop;
+  else if (outcome === 't1') closePrice = trade.target1;
+  else if (outcome === 't2') closePrice = trade.target2;
+  else closePrice = parseFloat(manualPrice);
+
+  if (isNaN(closePrice) || closePrice <= 0) return;
+
+  trade.closed     = true;
+  trade.closePrice = closePrice;
+  trade.closeDate  = new Date().toISOString().slice(0, 10);
+  trade.outcome    = outcome;
+  trade.pnl        = ((closePrice - trade.entry) / trade.entry * 100).toFixed(2);
+
+  saveJournal();
+  renderJournal();
+}
+
+function deleteTrade(id) {
+  journal = journal.filter(t => t.id !== id);
+  saveJournal();
+  renderJournal();
+}
+
+function showManualClose(id) {
+  const row = document.getElementById('manual-row-' + id);
+  if (row) row.style.display = row.style.display === 'none' ? 'flex' : 'none';
+}
+
+function confirmManualClose(id) {
+  const input = document.getElementById('manual-input-' + id);
+  if (!input) return;
+  closeTrade(id, 'manual', input.value);
+}
+
+function renderJournal() {
+  const open   = journal.filter(t => !t.closed);
+  const closed = journal.filter(t =>  t.closed).reverse();
+
+  // Stats
+  const totalTrades = closed.length;
+  const winners     = closed.filter(t => parseFloat(t.pnl) > 0).length;
+  const winRate     = totalTrades ? ((winners / totalTrades) * 100).toFixed(0) : '–';
+  const avgPnl      = totalTrades
+    ? (closed.reduce((s, t) => s + parseFloat(t.pnl), 0) / totalTrades).toFixed(2)
+    : '–';
+
+  document.getElementById('journal-stats').innerHTML = `
+    <div class="stat-card"><div class="label">Open trades</div><div class="value gold">${open.length}</div></div>
+    <div class="stat-card"><div class="label">Gesloten</div><div class="value" style="color:var(--text)">${totalTrades}</div></div>
+    <div class="stat-card"><div class="label">Win rate</div><div class="value ${winRate >= 50 ? 'green' : 'value'}">${winRate}${totalTrades ? '%' : ''}</div></div>
+    <div class="stat-card"><div class="label">Gem. P&L</div>
+      <div class="value ${avgPnl > 0 ? 'green' : avgPnl < 0 ? '' : ''}" style="${avgPnl < 0 ? 'color:var(--red)' : ''}">
+        ${avgPnl !== '–' ? (avgPnl > 0 ? '+' : '') + avgPnl + '%' : '–'}
+      </div>
+    </div>`;
+
+  // Open trades
+  const openEl = document.getElementById('journal-open');
+  if (!open.length) {
+    openEl.innerHTML = `<div class="watchlist-empty" style="padding:30px">
+      <div class="icon">📋</div>
+      Nog geen open trades.<br>Voeg een trade toe vanuit een ticker drawer.
+    </div>`;
+  } else {
+    openEl.innerHTML = open.map(t => `
+    <div class="trade-card">
+      <div class="trade-card-header">
+        <div>
+          <span class="trade-ticker">${t.ticker}</span>
+          <div class="trade-meta">${t.name} &nbsp;·&nbsp; Entry: ${t.date} &nbsp;·&nbsp; Score: ${t.score}</div>
+        </div>
+        <button class="btn-delete-trade" onclick="deleteTrade(${t.id})">✕ Verwijder</button>
+      </div>
+      <div class="trade-levels">
+        <div class="trade-level">
+          <div class="tl-label">Entry</div>
+          <div class="tl-val" style="color:var(--text)">$${t.entry.toFixed(2)}</div>
+        </div>
+        <div class="trade-level">
+          <div class="tl-label">Stop</div>
+          <div class="tl-val" style="color:var(--red)">$${t.stop.toFixed(2)}</div>
+        </div>
+        <div class="trade-level">
+          <div class="tl-label">Target 1</div>
+          <div class="tl-val" style="color:var(--green)">$${t.target1.toFixed(2)}</div>
+        </div>
+        <div class="trade-level">
+          <div class="tl-label">Target 2</div>
+          <div class="tl-val" style="color:#a8ff78">$${t.target2.toFixed(2)}</div>
+        </div>
+      </div>
+      <div class="trade-actions">
+        <button class="btn-outcome stop"  onclick="closeTrade(${t.id}, 'stop')">Stop geraakt</button>
+        <button class="btn-outcome t1"    onclick="closeTrade(${t.id}, 't1')">Target 1</button>
+        <button class="btn-outcome t2"    onclick="closeTrade(${t.id}, 't2')">Target 2</button>
+        <button class="btn-outcome manual" onclick="showManualClose(${t.id})">Handmatig</button>
+      </div>
+      <div class="manual-close-row" id="manual-row-${t.id}" style="display:none">
+        <input type="number" id="manual-input-${t.id}" placeholder="Slotkoers $" step="0.01">
+        <button class="btn-confirm" onclick="confirmManualClose(${t.id})">Bevestig</button>
+      </div>
+    </div>`).join('');
+  }
+
+  // Gesloten trades
+  const closedEl = document.getElementById('journal-closed');
+  if (!closed.length) {
+    closedEl.innerHTML = `<div style="color:var(--muted);font-size:13px;padding:16px 0">Nog geen gesloten trades.</div>`;
+  } else {
+    const outcomeLabel = { stop:'Stop', t1:'Target 1', t2:'Target 2', manual:'Handmatig' };
+    const outcomeCls   = { stop:'outcome-stop', t1:'outcome-t1', t2:'outcome-t2', manual:'outcome-manual' };
+    closedEl.innerHTML = `
+    <div class="table-wrap">
+      <table style="font-size:12px">
+        <thead>
+          <tr>
+            <th>Ticker</th><th>Entry datum</th><th>Sluit datum</th>
+            <th>Entry</th><th>Slotkoers</th><th>Uitkomst</th><th>P&L</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${closed.map(t => {
+            const pnl = parseFloat(t.pnl);
+            const pnlClass = pnl >= 0 ? 'pnl-pos' : 'pnl-neg';
+            const pnlSign  = pnl >= 0 ? '+' : '';
+            return `<tr>
+              <td style="font-weight:700;color:var(--gold);font-family:var(--font-mono)">${t.ticker}</td>
+              <td style="color:var(--text-dim)">${t.date}</td>
+              <td style="color:var(--text-dim)">${t.closeDate}</td>
+              <td style="font-family:var(--font-mono)">$${t.entry.toFixed(2)}</td>
+              <td style="font-family:var(--font-mono)">$${parseFloat(t.closePrice).toFixed(2)}</td>
+              <td><span class="outcome-badge ${outcomeCls[t.outcome]}">${outcomeLabel[t.outcome]}</span></td>
+              <td class="${pnlClass}">${pnlSign}${t.pnl}%</td>
+              <td><button class="btn-delete-trade" onclick="deleteTrade(${t.id})">✕</button></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1054,6 +1423,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     tab.classList.add('active');
     document.getElementById('panel-' + activeTab).classList.add('active');
     if (activeTab === 'watchlist') renderWatchlist();
+    if (activeTab === 'journal')   renderJournal();
   });
 });
 
