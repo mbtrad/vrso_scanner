@@ -586,6 +586,21 @@
   .pnl-pos { color: var(--green); font-family: var(--font-mono); font-weight: 700; }
   .pnl-neg { color: var(--red);   font-family: var(--font-mono); font-weight: 700; }
 
+  .trade-edit-input {
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    width: 100%;
+    padding: 2px 0;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .trade-edit-input:hover  { border-bottom-color: var(--text-dim); }
+  .trade-edit-input:focus  { border-bottom-color: var(--gold); }
+
   /* Manual close input */
   .manual-close-row {
     display: flex;
@@ -1292,6 +1307,15 @@ function deleteTrade(id) {
   renderJournal();
 }
 
+function updateTradeField(id, field, value) {
+  const trade = journal.find(t => t.id === id);
+  if (!trade) return;
+  const val = parseFloat(value);
+  if (isNaN(val) || val <= 0) return;
+  trade[field] = val;
+  saveJournal();
+}
+
 function showManualClose(id) {
   const row = document.getElementById('manual-row-' + id);
   if (row) row.style.display = row.style.display === 'none' ? 'flex' : 'none';
@@ -1345,19 +1369,27 @@ function renderJournal() {
       <div class="trade-levels">
         <div class="trade-level">
           <div class="tl-label">Entry</div>
-          <div class="tl-val" style="color:var(--text)">$${t.entry.toFixed(2)}</div>
+          <input type="number" class="trade-edit-input" value="${t.entry.toFixed(2)}"
+            step="0.01" onchange="updateTradeField(${t.id}, 'entry', this.value)"
+            style="color:var(--text)">
         </div>
         <div class="trade-level">
           <div class="tl-label">Stop</div>
-          <div class="tl-val" style="color:var(--red)">$${t.stop.toFixed(2)}</div>
+          <input type="number" class="trade-edit-input" value="${t.stop.toFixed(2)}"
+            step="0.01" onchange="updateTradeField(${t.id}, 'stop', this.value)"
+            style="color:var(--red)">
         </div>
         <div class="trade-level">
           <div class="tl-label">Target 1</div>
-          <div class="tl-val" style="color:var(--green)">$${t.target1.toFixed(2)}</div>
+          <input type="number" class="trade-edit-input" value="${t.target1.toFixed(2)}"
+            step="0.01" onchange="updateTradeField(${t.id}, 'target1', this.value)"
+            style="color:var(--green)">
         </div>
         <div class="trade-level">
           <div class="tl-label">Target 2</div>
-          <div class="tl-val" style="color:#a8ff78">$${t.target2.toFixed(2)}</div>
+          <input type="number" class="trade-edit-input" value="${t.target2.toFixed(2)}"
+            step="0.01" onchange="updateTradeField(${t.id}, 'target2', this.value)"
+            style="color:#a8ff78">
         </div>
       </div>
       <div class="trade-actions">
