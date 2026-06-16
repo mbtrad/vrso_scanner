@@ -460,9 +460,10 @@ def run_scanner():
 
     # ── Data ophalen ─────────────────────────────────────────
     start_date = (datetime.now() - timedelta(days=CONFIG["lookback_days"])).strftime("%Y-%m-%d")
+    end_date   = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")  # morgen = zeker alles t/m vandaag
 
     print("📥 SPY ophalen...")
-    spy_raw = yf.download("SPY", start=start_date, progress=False, auto_adjust=True)
+    spy_raw = yf.download("SPY", start=start_date, end=end_date, progress=False, auto_adjust=True)
     if spy_raw.empty:
         print("❌ SPY download mislukt")
         return
@@ -481,6 +482,7 @@ def run_scanner():
             raw = yf.download(
                 batch,
                 start=start_date,
+                end=end_date,
                 progress=False,
                 auto_adjust=True,
                 group_by="ticker",
